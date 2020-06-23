@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   width="2048" height="2048"
+					   addedToStage="windowedapplication1_addedToStageHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.utils.setTimeout;
+			
+			import starling.core.Starling;
+			private static const imageAndXmlPath:String = "D:/SVN/client/sourceCode/SummonWorld2/resources/zhCN/ATF/pc/assets/atlasATF/dyload";
+			private var _starling:Starling;
+
+			private var fileList:Vector.<File>;
+			private var options:PNGEncoderOptions = new PNGEncoderOptions();
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				atf2png();
+			 	slicePng();
+			}
+			protected function atf2png():void{
+				var file:File = new File(imageAndXmlPath);
+				var getDirectoryListing:Array = file.getDirectoryListing();
+				fileList = new Vector.<File>;
+				for (var i:int = 0; i < getDirectoryListing.length; i++) 
+				{
+					var f:File = getDirectoryListing[i];
+					if(f.extension!="atf"){
+						continue;
+					}
+					//						fileList.push(f);
+					try{
+						
+						var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
+						var content:StarlingContent = _starling.root as StarlingContent;
+						content.saveFile(readFile,f);
+						trace("atf2png:" + f.nativePath);
+						
+					}
+					catch(e:Error){
+						var getStackTrace:String = e.getStackTrace();
+						trace("atf2png:" + getStackTrace);
+					}
+					
+				}
+				trace("atf2png 完成" );
+			}
+	 
+			 
+			
+			protected function windowedapplication1_addedToStageHandler(event:Event):void
+			{
+				var _viewPort:Rectangle = new Rectangle(0, 0, 2048, 2048);
+				_starling = new Starling(StarlingContent, stage, _viewPort, null, "auto", "baseline");
+				_starling.enableErrorChecking = false;
+				_starling.start();
+			}
+			
+			private function onTime():void
+			{
+				if(fileList.length<=0)return;
+				try{
+					var f:File = fileList.pop();
+					var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
+					var content:StarlingContent = _starling.root as StarlingContent;
+					content.saveFile(readFile,f);
+					
+				}
+				catch(e:Error){
+					var getStackTrace:String = e.getStackTrace();
+					trace("dddddddddddddd:" + getStackTrace);
+				}
+				setTimeout(onTime,50);
+			}
+			
+			private function slicePng():void
+			{
+			
+				var xmlDic:Dictionary = getXmlDic();
+				var file:File = new File(imageAndXmlPath + "/PNG");
+			
+				var getDirectoryListing:Array = file.getDirectoryListing();
+				fileList = new Vector.<File>;
+				for (var i:int = 0; i < getDirectoryListing.length; i++) 
+				{
+					var f:File = getDirectoryListing[i];
+					if(f.extension!="png"){
+						continue;
+					}
+					fileList.push(f);
+					
+				}
+				handlerSlice(fileList,xmlDic);
+			}
+			
+			private function getXmlDic():Dictionary
+			{
+				var dic:Dictionary = new Dictionary();
+				var xmlFolder:String =imageAndXmlPath;
+				var file:File = new File(xmlFolder);
+				var getDirectoryListing:Array = file.getDirectoryListing();
+				fileList = new Vector.<File>;
+				for (var i:int = 0; i < getDirectoryListing.length; i++) 
+				{
+					var f:File = getDirectoryListing[i];
+					if(f.extension!="xml"){
+						continue;
+					}
+					try{
+						
+						var readFile:XML = FileOperationer.readXML(f.nativePath);
+						var children:XMLList = readFile.children();
+						var len:int = children.length();
+						var vect:Vector.<Rect> =new Vector.<Rect>;
+						for (var j:int = 0; j < len; j++) 
+						{
+							var item:XML = children[j];
+							
+							vect.push(new Rect(item));
+							
+						}
+						
+						
+						 dic[f.name.replace(".xml","")] = vect;
+						
+					}
+					catch(e:Error){
+						var getStackTrace:String = e.getStackTrace();
+						trace("slicePng:" + getStackTrace);
+					}
+					
+				}
+				
+				return dic;
+			}
+			
+			private function handlerSlice(fileList:Vector.<File>,xmlDic:Dictionary):void
+			{
+				if(fileList.length <=0)return;
+				try{
+					var f:File = fileList.pop();
+					
+					var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
+					
+					var loader:Loader = new Loader();
+					loader.loadBytes(readFile);
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE,function(...args):void{
+						var bitmap:Bitmap = loader.content as Bitmap;
+						var bd:BitmapData = bitmap.bitmapData;
+						var fileName:String = f.name.replace(".png","");
+						var subImageFolder:File = f.parent.resolvePath(fileName);
+						if(!subImageFolder.exists){
+							subImageFolder.createDirectory();
+						}
+						var vect:Vector.<Rect> = xmlDic[fileName];
+						
+						for each (var rect:Rect in vect) 
+						{
+							var small:BitmapData = new BitmapData(rect.w,rect.h,true,0);
+							var m:Matrix = new Matrix();
+							m.translate(-rect.x,-rect.y);
+							small.draw(bd,m);
+							var writeBd:BitmapData;
+							if(rect.fw>0){
+								var bg:BitmapData = new BitmapData(rect.fw,rect.fh,true,0);
+							 	m.identity();
+								m.translate(-rect.fx,-rect.fy)
+								bg.draw(small,m);
+								writeBd = bg;
+																
+							}
+							else
+							{
+								writeBd = small;
+							}
+							var resolvePath:File = subImageFolder.resolvePath(rect.subImageName);
+							if(!resolvePath.parent.exists){
+								resolvePath.parent.createDirectory();
+							}
+							var bytes:ByteArray = writeBd.encode(writeBd.rect,options);
+							FileOperationer.writeFile(resolvePath.nativePath,bytes);
+							trace("写入文件 resolvePath.nativePath:" + resolvePath.nativePath);
+							
+							
+						}
+						trace("处理完成 f.nativePath:" + f.nativePath);
+						handlerSlice(fileList,xmlDic);
+					});
+					
+					
+					
+					
+				}
+				catch(e:Error){
+					var getStackTrace:String = e.getStackTrace();
+					trace("slicePng:" + getStackTrace);
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:HGroup>
+		<s:Button label="开始转换" click="button1_clickHandler(event)">
+			
+		</s:Button>
+	</s:HGroup>
+</s:WindowedApplication>
