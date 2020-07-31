@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:cb99df3bf39b452e7f6e6c9d44dd2ffd:1/1$ -->
+<TextureAtlas imagePath="worldMap2.png">
+    <SubTexture name="didi-button-default-skin" x="1947" y="1052" width="90" height="90"/>
+    <SubTexture name="didi-button-disabled-skin" x="1947" y="960" width="90" height="90"/>
+    <SubTexture name="lock_map_node31" x="1300" y="736" width="146" height="129" frameX="-11" frameY="-11" frameWidth="168" frameHeight="151"/>
+    <SubTexture name="lock_map_node32" x="1928" y="408" width="116" height="136" frameX="-12" frameY="-10" frameWidth="138" frameHeight="156"/>
+    <SubTexture name="lock_map_node33" x="1514" y="501" width="166" height="155" frameX="-12" frameY="-12" frameWidth="190" frameHeight="179"/>
+    <SubTexture name="lock_map_node34" x="1845" y="960" width="100" height="135" frameX="-13" frameY="-17" frameWidth="126" frameHeight="165"/>
+    <SubTexture name="lock_map_node35" x="1839" y="697" width="141" height="141" frameX="-16" frameY="-11" frameWidth="169" frameHeight="167"/>
+    <SubTexture name="lock_map_node36" x="1715" y="954" width="128" height="108" frameX="-13" frameY="-15" frameWidth="154" frameHeight="136"/>
+    <SubTexture name="lock_map_node37" x="1905" y="840" width="132" height="118" frameX="-10" frameY="-11" frameWidth="154" frameHeight="140"/>
+    <SubTexture name="lock_map_node38" x="1446" y="892" width="135" height="220" frameX="-12" frameY="-11" frameWidth="159" frameHeight="246"/>
+    <SubTexture name="lock_map_node39" x="1583" y="1062" width="120" height="98" frameX="-11" frameY="-15" frameWidth="146" frameHeight="128"/>
+    <SubTexture name="lock_map_node40" x="1140" y="501" width="172" height="166" frameX="-13" frameY="-13" frameWidth="200" frameHeight="190"/>
+    <SubTexture name="lock_map_node41" x="1140" y="669" width="158" height="207" frameX="-15" frameY="-13" frameWidth="186" frameHeight="233"/>
+    <SubTexture name="lock_map_node42" x="1573" y="368" width="181" height="131" frameX="-11" frameY="-14" frameWidth="205" frameHeight="157"/>
+    <SubTexture name="lock_map_node43" x="1140" y="287" width="190" height="212" frameX="-13" frameY="-15" frameWidth="216" frameHeight="240"/>
+    <SubTexture name="lock_map_node44" x="1378" y="2" width="224" height="269" frameX="-12" frameY="-15" frameWidth="250" frameHeight="297"/>
+    <SubTexture name="lock_map_node45" x="1604" y="191" width="196" height="175" frameX="-11" frameY="-16" frameWidth="222" frameHeight="207"/>
+    <SubTexture name="map1003" x="2" y="2" width="1136" height="768"/>
+    <SubTexture name="over_map_node31" x="1314" y="591" width="160" height="143" frameX="-4" frameY="-4" frameWidth="168" frameHeight="151"/>
+    <SubTexture name="over_map_node32" x="1583" y="912" width="130" height="148" frameX="-5" frameY="-5" frameWidth="138" frameHeight="156"/>
+    <SubTexture name="over_map_node33" x="1332" y="420" width="180" height="169" frameX="-5" frameY="-5" frameWidth="190" frameHeight="179"/>
+    <SubTexture name="over_map_node34" x="1928" y="546" width="112" height="149" frameX="-8" frameY="-10" frameWidth="126" frameHeight="165"/>
+    <SubTexture name="over_map_node35" x="1682" y="631" width="155" height="155" frameX="-8" frameY="-4" frameWidth="169" frameHeight="167"/>
+    <SubTexture name="over_map_node36" x="1627" y="788" width="140" height="122" frameX="-7" frameY="-8" frameWidth="154" frameHeight="136"/>
+    <SubTexture name="over_map_node37" x="1300" y="867" width="144" height="132" frameX="-4" frameY="-4" frameWidth="154" frameHeight="140"/>
+    <SubTexture name="over_map_node38" x="1476" y="658" width="149" height="232" frameX="-5" frameY="-6" frameWidth="159" frameHeight="246"/>
+    <SubTexture name="over_map_node39" x="1769" y="840" width="134" height="112" frameX="-4" frameY="-8" frameWidth="146" frameHeight="128"/>
+    <SubTexture name="over_map_node40" x="1802" y="228" width="186" height="178" frameX="-6" frameY="-8" frameWidth="200" frameHeight="190"/>
+    <SubTexture name="over_map_node41" x="1756" y="408" width="170" height="221" frameX="-9" frameY="-5" frameWidth="186" frameHeight="233"/>
+    <SubTexture name="over_map_node42" x="1378" y="273" width="193" height="145" frameX="-5" frameY="-7" frameWidth="205" frameHeight="157"/>
+    <SubTexture name="over_map_node43" x="1816" y="2" width="204" height="224" frameX="-6" frameY="-9" frameWidth="216" frameHeight="240"/>
+    <SubTexture name="over_map_node44" x="1140" y="2" width="236" height="283" frameX="-7" frameY="-7" frameWidth="250" frameHeight="297"/>
+    <SubTexture name="over_map_node45" x="1604" y="2" width="210" height="187" frameX="-4" frameY="-10" frameWidth="222" frameHeight="207"/>
+</TextureAtlas>

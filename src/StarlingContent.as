@@ -2,12 +2,9 @@ package
 {
  
 	import flash.display.BitmapData;
-	import flash.events.Event;
 	import flash.filesystem.File;
 	import flash.filesystem.FileStream;
-	import flash.net.FileFilter;
 	import flash.utils.ByteArray;
-	import flash.utils.setTimeout;
 	
 	import mx.graphics.codec.PNGEncoder;
 	

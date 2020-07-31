@@ -2,203 +2,195 @@
 <s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
 					   xmlns:s="library://ns.adobe.com/flex/spark"
 					   xmlns:mx="library://ns.adobe.com/flex/mx"
-					   width="2048" height="2048"
+					   width="1048" height="1048"
 					   addedToStage="windowedapplication1_addedToStageHandler(event)">
 	
 	<fx:Script>
-		<![CDATA[
-			import flash.utils.setTimeout;
+		<![CDATA[  
+			import game.tool.LogWriter;
+			public static const logUrl:String = File.applicationDirectory.nativePath;
+			import mx.managers.DragManager;
 			
-			import starling.core.Starling;
-			private static const imageAndXmlPath:String = "D:/SVN/client/sourceCode/SummonWorld2/resources/zhCN/ATF/pc/assets/atlasATF/dyload";
-			private var _starling:Starling;
-
-			private var fileList:Vector.<File>;
-			private var options:PNGEncoderOptions = new PNGEncoderOptions();
+			public static var THIS:Atf2Png;
+			private var textInfo:Vector.<String> = new Vector.<String>;
+			private var png2AtfUtils:Png2AtfUtils;
 			protected function button1_clickHandler(event:MouseEvent):void
 			{
-				atf2png();
-			 	slicePng();
-			}
-			protected function atf2png():void{
-				var file:File = new File(imageAndXmlPath);
-				var getDirectoryListing:Array = file.getDirectoryListing();
-				fileList = new Vector.<File>;
-				for (var i:int = 0; i < getDirectoryListing.length; i++) 
-				{
-					var f:File = getDirectoryListing[i];
-					if(f.extension!="atf"){
-						continue;
-					}
-					//						fileList.push(f);
-					try{
-						
-						var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
-						var content:StarlingContent = _starling.root as StarlingContent;
-						content.saveFile(readFile,f);
-						trace("atf2png:" + f.nativePath);
-						
-					}
-					catch(e:Error){
-						var getStackTrace:String = e.getStackTrace();
-						trace("atf2png:" + getStackTrace);
-					}
-					
-				}
-				trace("atf2png 完成" );
-			}
+		 
 	 
-			 
+//				toPng(new File("D:/SVN/client/sourceCode/SummonWorld2/resources/zhCN/ATF/pc/assets/atlasATF/atlasATF/preload/effect.atf"));
+			 	 
+//				var pictureUtils:PictureUtils = new PictureUtils();
+//				pictureUtils.packagePic("D:/SVN/client/sourceCode/SummonWorld2/resources/zhCN/ATF/pc/assets/atlasATF/atlasATF/preload/PNG",new File("D:/client_workspace/NewPackagePng"));
+//		 		testXml();
+//				new Atf2pngUtils(this.stage);
+//			 	new PngSliceUtils().slicePng();
+ 
+				
+				
+		 
+			}
+
 			
 			protected function windowedapplication1_addedToStageHandler(event:Event):void
 			{
-				var _viewPort:Rectangle = new Rectangle(0, 0, 2048, 2048);
-				_starling = new Starling(StarlingContent, stage, _viewPort, null, "auto", "baseline");
-				_starling.enableErrorChecking = false;
-				_starling.start();
-			}
+				LogWriter.removeMoreLog(logUrl);
+				THIS = this;
+				new Atf2pngUtils(this.stage);
 			
-			private function onTime():void
-			{
-				if(fileList.length<=0)return;
-				try{
-					var f:File = fileList.pop();
-					var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
-					var content:StarlingContent = _starling.root as StarlingContent;
-					content.saveFile(readFile,f);
-					
-				}
-				catch(e:Error){
-					var getStackTrace:String = e.getStackTrace();
-					trace("dddddddddddddd:" + getStackTrace);
-				}
-				setTimeout(onTime,50);
-			}
-			
-			private function slicePng():void
-			{
-			
-				var xmlDic:Dictionary = getXmlDic();
-				var file:File = new File(imageAndXmlPath + "/PNG");
-			
-				var getDirectoryListing:Array = file.getDirectoryListing();
-				fileList = new Vector.<File>;
-				for (var i:int = 0; i < getDirectoryListing.length; i++) 
-				{
-					var f:File = getDirectoryListing[i];
-					if(f.extension!="png"){
-						continue;
-					}
-					fileList.push(f);
-					
-				}
-				handlerSlice(fileList,xmlDic);
-			}
-			
-			private function getXmlDic():Dictionary
-			{
-				var dic:Dictionary = new Dictionary();
-				var xmlFolder:String =imageAndXmlPath;
-				var file:File = new File(xmlFolder);
-				var getDirectoryListing:Array = file.getDirectoryListing();
-				fileList = new Vector.<File>;
-				for (var i:int = 0; i < getDirectoryListing.length; i++) 
-				{
-					var f:File = getDirectoryListing[i];
-					if(f.extension!="xml"){
-						continue;
-					}
-					try{
-						
-						var readFile:XML = FileOperationer.readXML(f.nativePath);
-						var children:XMLList = readFile.children();
-						var len:int = children.length();
-						var vect:Vector.<Rect> =new Vector.<Rect>;
-						for (var j:int = 0; j < len; j++) 
-						{
-							var item:XML = children[j];
-							
-							vect.push(new Rect(item));
-							
-						}
-						
-						
-						 dic[f.name.replace(".xml","")] = vect;
-						
-					}
-					catch(e:Error){
-						var getStackTrace:String = e.getStackTrace();
-						trace("slicePng:" + getStackTrace);
-					}
-					
-				}
 				
-				return dic;
+
 			}
 			
-			private function handlerSlice(fileList:Vector.<File>,xmlDic:Dictionary):void
+			public static function addLog(info:String):void{
+				var date:Date = new Date();
+				var time:String = "[" + LogWriter.getDateStr(date) + " " + LogWriter.getTimeStr(date) + "] ";
+				LogWriter.writeToHistoryFile(logUrl,time + info);
+			}
+	 
+			public function addError(info:String):void
 			{
-				if(fileList.length <=0)return;
-				try{
-					var f:File = fileList.pop();
+				var errorInfo:String = "ERROR: "+info;
+				addInfo(errorInfo);	
+				addLog(errorInfo);
+			}
+			public function addInfo(info:String):void
+			{
+				if (!info) 
+				{
+					return;
 					
-					var readFile:ByteArray = FileOperationer.readFile(f.nativePath);
-					
-					var loader:Loader = new Loader();
-					loader.loadBytes(readFile);
-					loader.contentLoaderInfo.addEventListener(Event.COMPLETE,function(...args):void{
-						var bitmap:Bitmap = loader.content as Bitmap;
-						var bd:BitmapData = bitmap.bitmapData;
-						var fileName:String = f.name.replace(".png","");
-						var subImageFolder:File = f.parent.resolvePath(fileName);
-						if(!subImageFolder.exists){
-							subImageFolder.createDirectory();
-						}
-						var vect:Vector.<Rect> = xmlDic[fileName];
-						
-						for each (var rect:Rect in vect) 
+				}
+			
+				var append:Boolean = false;
+				if (info.indexOf(".")==0&&textInfo.length> 0) 
+				{
+					textInfo[textInfo.length-1] = textInfo[textInfo.length-1] + info; 	
+				}
+				else{
+					textInfo.push(info);	
+		
+					append = true;
+				}
+				 
+				 var maxCount:uint = 100;
+				 if (textInfo.length > maxCount) 
+				 {
+					 textInfo = textInfo.splice(0,maxCount/2);
+					 this.infoArea.text = textInfo.join("\n");	 
+					 
+				 }
+				 if(append){
+					 
+					this.infoArea.appendText(info+"\n");
+				 }
+				 else{
+					 this.infoArea.appendText(info);
+				 }
+				 
+				
+			}
+			
+			protected function recover_changeHandler(event:Event):void
+			{
+				PictureUtils.recoverFile = (event.currentTarget as CheckBox).selected;
+				
+			}
+			
+			protected function flashBitmapCut_changeHandler(event:Event):void
+			{
+				PicturePackager.flashCut = (event.currentTarget as CheckBox).selected;
+			}
+			
+		
+			
+			
+			
+			protected function onDragEnter(event:NativeDragEvent):void
+			{
+				var border:BorderContainer = event.currentTarget as BorderContainer;
+				var level:int = getPickLevel(border);
+				var clip:Clipboard = event.clipboard;
+				if(clip.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
+				{
+					var files:Array = clip.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+					for each(var f:File in files)
+					{
+						if (level > 0) 
 						{
-							var small:BitmapData = new BitmapData(rect.w,rect.h,true,0);
-							var m:Matrix = new Matrix();
-							m.translate(-rect.x,-rect.y);
-							small.draw(bd,m);
-							var writeBd:BitmapData;
-							if(rect.fw>0){
-								var bg:BitmapData = new BitmapData(rect.fw,rect.fh,true,0);
-							 	m.identity();
-								m.translate(-rect.fx,-rect.fy)
-								bg.draw(small,m);
-								writeBd = bg;
-																
-							}
-							else
+							
+							if(f.isDirectory)
 							{
-								writeBd = small;
+								DragManager.acceptDragDrop(border);
+								return;
+								 
 							}
-							var resolvePath:File = subImageFolder.resolvePath(rect.subImageName);
-							if(!resolvePath.parent.exists){
-								resolvePath.parent.createDirectory();
-							}
-							var bytes:ByteArray = writeBd.encode(writeBd.rect,options);
-							FileOperationer.writeFile(resolvePath.nativePath,bytes);
-							trace("写入文件 resolvePath.nativePath:" + resolvePath.nativePath);
-							
-							
 						}
-						trace("处理完成 f.nativePath:" + f.nativePath);
-						handlerSlice(fileList,xmlDic);
-					});
-					
-					
-					
-					
-				}
-				catch(e:Error){
-					var getStackTrace:String = e.getStackTrace();
-					trace("slicePng:" + getStackTrace);
+						DragManager.acceptDragDrop(border);
+						return;
+						
+						
+					}
 				}
 				
 			}
+			
+			protected function onDragDrop(event:NativeDragEvent):void
+			{
+				var clip:Clipboard = event.clipboard;
+				var borderContainer:BorderContainer = event.currentTarget as BorderContainer;
+				var level:int = getPickLevel(borderContainer);
+				
+				if (level <= 0) 
+				{
+					level = 0;
+					if (!this.png2AtfUtils) 
+					{
+						this.png2AtfUtils =new Png2AtfUtils();
+					}
+				}
+				if(clip.hasFormat(ClipboardFormats.FILE_LIST_FORMAT))
+				{
+					var files:Array = clip.getData(ClipboardFormats.FILE_LIST_FORMAT) as Array;
+					if (level > 0) 
+					{
+						for each(var f:File in files)
+						{
+							if(f.isDirectory)
+							{
+								
+								var pictureUtils:PictureUtils = new PictureUtils();
+								
+								pictureUtils.packDir(f,level);
+							}
+						}
+					}
+					else{
+						for each (var ff:File in files) 
+						{
+							this.png2AtfUtils.convert(ff,null);
+						}  
+					}
+					
+				}
+			}
+			
+			private function getPickLevel(borderContainer:BorderContainer):int
+			{
+				switch(borderContainer)
+				{
+					case splitePack1:
+ 						return 0;
+					case splitePack2:
+						return 1;
+					case splitePack3:
+						return 2;
+					default:
+						return 0;
+				}
+			}
+			
+		
 			
 		]]>
 	</fx:Script>
@@ -206,9 +198,33 @@
 	<fx:Declarations>
 		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
 	</fx:Declarations>
-	<s:HGroup>
-		<s:Button label="开始转换" click="button1_clickHandler(event)">
+	<s:VGroup width="100%" height="100%">
+		<s:HGroup>
+			<s:Button label="开始转换" click="button1_clickHandler(event)"/>
+			<s:CheckBox label="覆盖旧文件" change="recover_changeHandler(event)"/>
+			<s:CheckBox label="Flash位图裁剪算法" change="flashBitmapCut_changeHandler(event)" selected="true"/>
 			
-		</s:Button>
-	</s:HGroup>
+		</s:HGroup>
+	 
+		<s:HGroup width="100%">
+			<s:BorderContainer id="splitePack1" width="30%" height="100" backgroundColor="0x000066"
+							   nativeDragDrop="onDragDrop(event)"
+							   nativeDragEnter="onDragEnter(event)">
+				<s:Label text="拖动进来打包单张图片"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center"/>
+			</s:BorderContainer>
+			<s:BorderContainer id="splitePack2" width="30%" height="100" backgroundColor="0x006600"
+							   nativeDragDrop="onDragDrop(event)"
+							   nativeDragEnter="onDragEnter(event)">
+				
+				<s:Label text="拖动进来打包1级目录"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center" />
+			</s:BorderContainer>
+			<s:BorderContainer id="splitePack3" width="40%" height="100" backgroundColor="0x000066"
+							   nativeDragDrop="onDragDrop(event)"
+							   nativeDragEnter="onDragEnter(event)">
+				<s:Label text="拖动进来打包2级目录"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center"/>
+			</s:BorderContainer>
+		</s:HGroup>
+		<s:TextArea id="infoArea" width="100%" height="500"/>
+	 
+	</s:VGroup>
 </s:WindowedApplication>
