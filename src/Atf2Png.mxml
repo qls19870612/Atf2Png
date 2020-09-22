@@ -26,7 +26,7 @@
 //				new Atf2pngUtils(this.stage);
 //			 	new PngSliceUtils().slicePng();
  
-				
+//				KeyValueXml2Json.start();
 				
 		 
 			}
@@ -207,18 +207,18 @@
 		</s:HGroup>
 	 
 		<s:HGroup width="100%">
-			<s:BorderContainer id="splitePack1" width="30%" height="100" backgroundColor="0x000066"
+			<s:BorderContainer id="splitePack1" width="30%" height="100" backgroundColor="0xA6C7ED"
 							   nativeDragDrop="onDragDrop(event)"
 							   nativeDragEnter="onDragEnter(event)">
 				<s:Label text="拖动进来打包单张图片"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center"/>
 			</s:BorderContainer>
-			<s:BorderContainer id="splitePack2" width="30%" height="100" backgroundColor="0x006600"
+			<s:BorderContainer id="splitePack2" width="30%" height="100" backgroundColor="0xaaeeee"
 							   nativeDragDrop="onDragDrop(event)"
 							   nativeDragEnter="onDragEnter(event)">
 				
 				<s:Label text="拖动进来打包1级目录"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center" />
 			</s:BorderContainer>
-			<s:BorderContainer id="splitePack3" width="40%" height="100" backgroundColor="0x000066"
+			<s:BorderContainer id="splitePack3" width="40%" height="100" backgroundColor="0xA6C7ED"
 							   nativeDragDrop="onDragDrop(event)"
 							   nativeDragEnter="onDragEnter(event)">
 				<s:Label text="拖动进来打包2级目录"  verticalAlign="middle" horizontalCenter="middle" width="100%" height="100%" textAlign="center"/>
